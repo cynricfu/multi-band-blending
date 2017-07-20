@@ -84,6 +84,9 @@ def multi_band_blending(img1, img2, overlap_w, sigma=2.0, levels=None, half=Fals
     if sigma <= 0:
         print "error: sigma should be a positive real number"
         sys.exit()
+
+    subA, subB, mask = preprocess(img1, img2, overlap_w, half)
+
     max_levels = int(np.floor(
         np.log2(min(img1.shape[0], img1.shape[1], img2.shape[0], img2.shape[1]))))
     if levels is None:
@@ -92,7 +95,6 @@ def multi_band_blending(img1, img2, overlap_w, sigma=2.0, levels=None, half=Fals
         print "warning: inappropriate number of levels"
         levels = max_levels
 
-    subA, subB, mask = preprocess(img1, img2, overlap_w, half)
 
     # Get Gaussian pyramid and Laplacian pyramid
     GPA = GaussianPyramid(subA, sigma, levels)
@@ -100,6 +102,7 @@ def multi_band_blending(img1, img2, overlap_w, sigma=2.0, levels=None, half=Fals
     MP = GaussianPyramid(mask, sigma, levels)
     LPA = LaplacianPyramid(GPA)
     LPB = LaplacianPyramid(GPB)
+
 
     # Blend two Laplacian pyramidspass
     blended = blend_pyramid(LPA, LPB, MP)
