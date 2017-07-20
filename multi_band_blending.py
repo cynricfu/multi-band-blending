@@ -5,7 +5,7 @@ import sys
 import argparse
 
 
-def preprocess(img1, img2, overlap_w, half):
+def preprocess(img1, img2, overlap_w, flag_half):
     if img1.shape[0] != img2.shape[0]:
         print "error: image dimension error"
         sys.exit()
@@ -17,7 +17,7 @@ def preprocess(img1, img2, overlap_w, half):
     w1 = img1.shape[1]
     w2 = img2.shape[1]
 
-    if half:
+    if flag_half:
         shape = np.array(img1.shape)
         shape[1] = w1 / 2 + w2 / 2
 
@@ -77,7 +77,7 @@ def reconstruct(LS):
     return R
 
 
-def multi_band_blending(img1, img2, overlap_w, sigma=2.0, levels=None, half=False):
+def multi_band_blending(img1, img2, overlap_w, sigma=2.0, levels=None, flag_half=False):
     if overlap_w < 0:
         print "error: overlap_w should be a positive integer"
         sys.exit()
@@ -85,7 +85,7 @@ def multi_band_blending(img1, img2, overlap_w, sigma=2.0, levels=None, half=Fals
         print "error: sigma should be a positive real number"
         sys.exit()
 
-    subA, subB, mask = preprocess(img1, img2, overlap_w, half)
+    subA, subB, mask = preprocess(img1, img2, overlap_w, flag_half)
 
     max_levels = int(np.floor(
         np.log2(min(img1.shape[0], img1.shape[1], img2.shape[0], img2.shape[1]))))
@@ -133,12 +133,12 @@ if __name__ == '__main__':
                     help="number of levels of multi-band blending, calculated from image size if not provided")
     args = vars(ap.parse_args())
 
-    half = args['half']
+    flag_half = args['half']
     img1 = cv2.imread(args['first'])
     img2 = cv2.imread(args['second'])
     overlap_w = args['overlap']
     sigma = args['sigma']
     levels = args['levels']
 
-    result = multi_band_blending(img1, img2, overlap_w, sigma, levels, half)
+    result = multi_band_blending(img1, img2, overlap_w, sigma, levels, flag_half)
     cv2.imwrite('result.png', result)
