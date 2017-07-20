@@ -63,7 +63,6 @@ def LaplacianPyramid(GP):
 def blend_pyramid(LPA, LPB, MP):
     blended = []
     for i, M in enumerate(MP):
-        True
         blended.append(LPA[i] * M + LPB[i] * (1.0 - M))
     return blended
 
