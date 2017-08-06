@@ -26,9 +26,6 @@ python multi_band_blending.py -f FIRST -s SECOND -o OVERLAP [-S SIGMA] [-l LEVEL
   -o OVERLAP, --overlap OVERLAP
                         width of the overlapped area between two images, even
                         number recommended
-  -S SIGMA, --sigma SIGMA
-                        standard deviation of Gaussian function, 2.0 by
-                        default
   -l LEVELS, --levels LEVELS
                         number of levels of multi-band blending, calculated
                         from image size if not provided
@@ -41,3 +38,5 @@ http://pages.cs.wisc.edu/~csverma/CS766_09/ImageMosaic/imagemosaic.html
 http://www.phototalks.idv.tw/academic/?p=1275
 
 http://blog.csdn.net/real_myth/article/details/52343612
+
+OpenCV samples: opencv/samples/python/lappyr.py
