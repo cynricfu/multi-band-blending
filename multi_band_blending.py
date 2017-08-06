@@ -13,7 +13,6 @@ def preprocess(img1, img2, overlap_w, flag_half):
         print "error: overlapped area too large"
         sys.exit()
 
-    h = img1.shape[0]
     w1 = img1.shape[1]
     w2 = img2.shape[1]
 
@@ -81,20 +80,18 @@ def multi_band_blending(img1, img2, overlap_w, leveln=None, flag_half=False):
 
     subA, subB, mask = preprocess(img1, img2, overlap_w, flag_half)
 
-    max_leveln = int(np.floor(
-        np.log2(min(img1.shape[0], img1.shape[1], img2.shape[0], img2.shape[1]))))
+    max_leveln = int(np.floor(np.log2(min(img1.shape[0], img1.shape[1],
+                                          img2.shape[0], img2.shape[1]))))
     if leveln is None:
         leveln = max_leveln
     if leveln < 1 or leveln > max_leveln:
         print "warning: inappropriate number of leveln"
         leveln = max_leveln
 
-
     # Get Gaussian pyramid and Laplacian pyramid
     MP = GaussianPyramid(mask, leveln)
     LPA = LaplacianPyramid(subA, leveln)
     LPB = LaplacianPyramid(subB, leveln)
-
 
     # Blend two Laplacian pyramidspass
     blended = blend_pyramid(LPA, LPB, MP)
@@ -112,15 +109,18 @@ if __name__ == '__main__':
     ap = argparse.ArgumentParser(
         description="A Python implementation of multi-band blending")
     ap.add_argument('-H', '--half', required=False, action='store_true',
-                    help="option to blend the left half of the first image and the right half of the second image")
+                    help="option to blend the left half of the first image \
+                          and the right half of the second image")
     ap.add_argument('-f', '--first', required=True,
                     help="path to the first (left) image")
     ap.add_argument('-s', '--second', required=True,
                     help="path to the second (right) image")
     ap.add_argument('-o', '--overlap', required=True, type=int,
-                    help="width of the overlapped area between two images, even number recommended")
+                    help="width of the overlapped area between two images, \
+                          even number recommended")
     ap.add_argument('-l', '--leveln', required=False, type=int,
-                    help="number of levels of multi-band blending, calculated from image size if not provided")
+                    help="number of levels of multi-band blending, \
+                          calculated from image size if not provided")
     args = vars(ap.parse_args())
 
     flag_half = args['half']
