@@ -1,7 +1,5 @@
 # Multi-Band Blending
 
-## Introduction
-
 A Python implementation of multi-band blending.
 
 ## Dependencies
